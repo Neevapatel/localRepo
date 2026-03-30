@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrewHaven - Premium Coffee Delivery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f1ed;
+            color: #333;
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #6f4e37 0%, #8b6f47 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffd9a8;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #f5f1ed;
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #ffd9a8;
+        }
+
+        .cart-icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #ffd9a8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #8b6f47 0%, #d4a574 100%);
+            color: white;
+            text-align: center;
+            padding: 6rem 2rem;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: #ffd9a8;
+            color: #6f4e37;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Products Section */
+        .products-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #6f4e37;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 100px;
+            height: 4px;
+            background: #d4a574;
+            position: absolute;
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(111, 78, 55, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #d4a574 0%, #c9956f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            color: #6f4e37;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .product-desc {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            color: #8b6f47;
+            font-weight: bold;
+        }
+
+        .add-to-cart {
+            background: #8b6f47;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: #6f4e37;
+        }
+
+        /* Cart Section */
+        .cart-sidebar {
+            display: none;
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 350px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+            z-index: 200;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+        }
+
+        .cart-sidebar.active {
+            display: block;
+        }
+
+        .cart-close {
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #6f4e37;
+            margin-bottom: 1rem;
+        }
+
+        .cart-title {
+            font-size: 1.5rem;
+            color: #6f4e37;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .cart-item {
+            background: #f5f1ed;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #d4a574;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: #6f4e37;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .checkout-btn:hover {
+            background: #5a3e2b;
+        }
+
+        /* Footer */
+        footer {
+            background: #6f4e37;
+            color: #f5f1ed;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 300;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #6f4e37;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">☕ BrewHaven</div>
+        <ul class="nav-links">
+            <li><a onclick="showSection('home')">Home</a></li>
+            <li><a onclick="showSection('menu')">Menu</a></li>
+            <li><a onclick="showSection('about')">About</a></li>
+            <li><a onclick="showSection('contact')">Contact</a></li>
+            <li class="cart-icon" onclick="toggleCart()">🛒 <span id="cart-count">0</span></li>
+        </ul>
+    </nav>
+
+    <!-- Home Section -->
+    <div id="home" class="page">
+        <div class="hero">
+            <h1>Brew Excellence at Home</h1>
+            <p>Freshly roasted coffee delivered to your door</p>
+            <button class="cta-button" onclick="showSection('menu')">Order Now</button>
+        </div>
+    </div>
+
+    <!-- Menu Section -->
+    <div id="menu" class="page" style="display:none;">
+        <div class="products-section">
+            <h2 class="section-title">Our Premium Selection</h2>
+            <div class="products-grid" id="products-grid"></div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div id="about" class="page" style="display:none;">
+        <div class="products-section">
+            <h2 class="section-title">About BrewHaven</h2>
+            <div style="background: white; padding: 2rem; border-radius: 15px; margin-top: 2rem;">
+                <p style="font-size: 1.1rem; line-height: 1.8; color: #555;">
+                    At BrewHaven, we believe that exceptional coffee should be accessible to everyone.
+                    Our beans are sourced from the finest coffee farms around the world and roasted to perfection
+                    in-house.
+                    We deliver freshness and quality straight to your home, ensuring you enjoy barista-quality coffee
+                    whenever you want.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div id="contact" class="page" style="display:none;">
+        <div class="products-section">
+            <h2 class="section-title">Contact Us</h2>
+            <form style="max-width: 500px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 15px;">
+                <input type="text" placeholder="Your Name"
+                    style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 2px solid #d4a574; border-radius: 8px;">
+                <input type="email" placeholder="Your Email"
+                    style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 2px solid #d4a574; border-radius: 8px;">
+                <textarea placeholder="Your Message" rows="5"
+                    style="width: 100%; padding: 0.8rem; border: 2px solid #d4a574; border-radius: 8px;"></textarea>
+                <button class="cta-button" style="width: 100%; margin-top: 1rem;">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <span class="cart-close" onclick="toggleCart()">✕</span>
+        <div class="cart-title">Your Cart</div>
+        <div id="cart-items"></div>
+        <button class="checkout-btn" onclick="checkout()">Checkout</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 BrewHaven. All rights reserved. | Delivering Excellence ☕</p>
+    </footer>
+
+    <script>
+        let cart = [];
+        const products = [
+            { id: 1, name: 'Espresso', price: 3.99, desc: 'Rich and intense' },
+            { id: 2, name: 'Cappuccino', price: 4.99, desc: 'Creamy perfection' },
+            { id: 3, name: 'Americano', price: 3.49, desc: 'Classic and bold' },
+            { id: 4, name: 'Latte', price: 5.49, desc: 'Smooth and velvety' },
+            { id: 5, name: 'Mocha', price: 5.99, desc: 'Chocolate delight' },
+            { id: 6, name: 'Macchiato', price: 4.49, desc: 'Espresso marked' }
+        ];
+
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <div class="product-image">☕</div>
+                    <div class="product-info">
+                        <div class="product-name">${p.name}</div>
+                        <div class="product-desc">${p.desc}</div>
+                        <div class="product-footer">
+                            <span class="price">$${p.price}</span>
+                            <button class="add-to-cart" onclick="addToCart(${p.id}, '${p.name}', ${p.price})">Add</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id, name, price) {
+            cart.push({ id, name, price });
+            updateCart();
+        }
+
+        function updateCart() {
+            document.getElementById('cart-count').textContent = cart.length;
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = cart.map((item, idx) => `
+                <div class="cart-item">
+                    <div>${item.name}</div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>$${item.price}</span>
+                        <button onclick="removeFromCart(${idx})" style="background: none; border: none; color: #d4a574; cursor: pointer;">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeFromCart(idx) {
+            cart.splice(idx, 1);
+            updateCart();
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('active');
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            alert('Order placed! Total: $' + (cart.reduce((sum, item) => sum + item.price, 0).toFixed(2)));
+            cart = [];
+            updateCart();
+            toggleCart();
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+            if (sectionId === 'menu') renderProducts();
+        }
+
+        renderProducts();
+    </script>
+</body>
+
+</html>
